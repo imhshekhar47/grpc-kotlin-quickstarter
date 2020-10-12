@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_package = "org.hshekhar.grpc";
+option java_multiple_files = true;
+
+package grpc;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+enum Status {
+  UNKNOWN = 0;
+  UP = 1;
+  DOWN = 2;
+}
+
+message Health {
+  string version = 1;
+  Status status = 2;
+
+  google.protobuf.Timestamp start_time = 3;
+}
+
+service HealthService {
+  rpc GetHealth(google.protobuf.Empty) returns (Health);
+}
