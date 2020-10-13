@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 
 internal class HealthServiceTest {
 
-    val grpcCleanUpRule = GrpcCleanupRule()
+    private val grpcCleanUpRule = GrpcCleanupRule()
 
     @BeforeTest
     fun setUp() {

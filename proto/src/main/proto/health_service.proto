@@ -21,6 +21,12 @@ message Health {
   google.protobuf.Timestamp start_time = 3;
 }
 
+message Heartbeat {
+  google.protobuf.Timestamp timestamp = 1;
+  Status status = 2;
+}
+
 service HealthService {
   rpc GetHealth(google.protobuf.Empty) returns (Health);
+  rpc GetHeartbeats(google.protobuf.Empty) returns (stream Heartbeat);
 }

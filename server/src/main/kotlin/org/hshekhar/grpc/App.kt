@@ -4,6 +4,7 @@ import io.grpc.ServerBuilder
 import io.grpc.protobuf.services.ProtoReflectionService
 import org.hshekhar.grpc.service.HealthService
 
+
 class AppServer(private val port: Int) {
     private val server = ServerBuilder.forPort(port)
             .addService(HealthService())
