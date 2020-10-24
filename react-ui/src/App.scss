@@ -1,0 +1,80 @@
+$dark-color: #282c34;
+$amber-color: #FF9900;
+$red-color: #CC0000;
+$green-color: #008800;
+
+$gutter-width: 16;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main {
+  .main-header {
+    background-color: $dark-color;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px #{$gutter-width}px;
+    height: 64px;
+
+    .header-brand-logo {
+      height: 48px;
+    }
+    
+    .spacebar { display: flex; flex-grow: 1;}
+
+    .health-indicator {
+      display: flex;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: $amber-color;
+
+      &.online {
+        background-color: $green-color;
+      }
+
+      &.offline {
+        background-color: $red-color;
+      }
+    }
+    
+  }
+
+  .beats-browser {
+    padding: #{$gutter-width}px;
+    background-color: #DFDFDF;
+
+    .beats {
+      display: flex;
+      flex-direction: column;
+      .beat {
+
+        padding: #{$gutter-width/4}px 0px;
+        margin-top: #{$gutter-width/4}px;
+        background-color: $amber-color;
+        font-size: 12px;
+        font-family: 'Courier New', Courier, monospace;
+
+        &.online { background-color: adjust-color($green-color, $alpha: -0.5);}
+        &.offline { background-color: adjust-color($color: $red-color, $alpha: -0.5);}
+
+        &:last-child {
+          margin-bottom: #{$gutter-width/4}px;
+        }
+      }
+    }
+  }
+
+  .alert {
+    background-color: adjust-color($color: $red-color, $alpha: -0.5);
+    padding: #{$gutter-width}px;
+    color: $red-color;
+  }
+}
+
+
