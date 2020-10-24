@@ -8,8 +8,6 @@ $gutter-width: 16;
 html, body {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
 }
 
 .main {
@@ -18,7 +16,8 @@ html, body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0px #{$gutter-width}px;
+    //padding: 0px #{$gutter-width}px;
+    //margin: 0px -#{$gutter-width}px;
     height: 64px;
 
     .header-brand-logo {
@@ -49,12 +48,21 @@ html, body {
     padding: #{$gutter-width}px;
     background-color: #DFDFDF;
 
+    .stats {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
     .beats {
       display: flex;
       flex-direction: column;
       .beat {
-
-        padding: #{$gutter-width/4}px 0px;
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        align-items: stretch;
         margin-top: #{$gutter-width/4}px;
         background-color: $amber-color;
         font-size: 12px;
@@ -65,6 +73,19 @@ html, body {
 
         &:last-child {
           margin-bottom: #{$gutter-width/4}px;
+        }
+
+        .id {
+          display: flex;
+          justify-content: center;
+          align-items: center; 
+          color: white;
+          background-color: $dark-color;
+          width: #{$gutter-width*2}px;
+        }
+
+        .detail {
+          margin: #{$gutter-width/4}px;
         }
       }
     }

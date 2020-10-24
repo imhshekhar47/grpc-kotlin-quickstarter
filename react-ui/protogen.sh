@@ -11,6 +11,8 @@ if [[ -d "${PROTO_OUT_DIR}" ]]; then
     done
 fi
 
+POTOCGEN=./node_modules/protoc/protoc/bin/protoc
+
 echo "SCRIPT_DIR=${SCRIPT_DIR}"
 echo "PROTO_SRC_DIR=${PROTO_SRC_DIR}"
 
@@ -18,12 +20,20 @@ for f in `ls ${PROTO_SRC_DIR}/*`; do
     echo "${f}"
 done
 
-protoc \
+# protoc \
+#     --js_out=import_style=commonjs,binary:${PROTO_OUT_DIR}/ \
+#     --grpc-web_out=import_style=typescript,mode=grpcwebtext:${PROTO_OUT_DIR}/ \
+#     --plugin=protoc-gen-grpc=./node_modules/.bin/grpc_tools_node_protoc_plugin \
+#     -I ${PROTO_SRC_DIR} \
+#     ${PROTO_SRC_DIR}/*.proto
+
+${POTOCGEN} \
+    --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts \
     --js_out=import_style=commonjs,binary:${PROTO_OUT_DIR}/ \
-    --grpc-web_out=import_style=typescript,mode=grpcwebtext:${PROTO_OUT_DIR}/ \
-    --plugin=protoc-gen-grpc=./node_modules/.bin/grpc_tools_node_protoc_plugin \
+    --ts_out=service=true:${PROTO_OUT_DIR}/ \
     -I ${PROTO_SRC_DIR} \
     ${PROTO_SRC_DIR}/*.proto
+
 
 
 # Below section of code is to disable the below error 

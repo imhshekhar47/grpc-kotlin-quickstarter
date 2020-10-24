@@ -1,10 +1,11 @@
+import Button from '@material-ui/core/Button';
+import { LocalHospital } from '@material-ui/icons';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
-import { ClientReadableStream } from 'grpc';
 import React, { useEffect, useState } from 'react';
 import './App.scss';
 import logo from './logo.svg';
-import { HealthServiceClient } from './proto/Health_serviceServiceClientPb';
 import { Health, Heartbeat, Status } from './proto/health_service_pb';
+import { HealthServiceClient, ResponseStream } from './proto/health_service_pb_service';
 
 const client = new HealthServiceClient("http://0.0.0.0:8080");
 
@@ -14,41 +15,33 @@ function App() {
   const [beats, setBeats] = useState<Heartbeat[]>([]);
   const [isHearbeatOn, setHeartBeat] = useState<boolean>(false);
 
-  var stream : ClientReadableStream<Heartbeat> | null = null;
+  var stream: ResponseStream<Heartbeat> | null = null;
 
   
   useEffect(() => {
     const request = new Empty();
     const metadata = {}
-    client.getHealth(request, metadata)
-      .then(data => {
-        setHealth(data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    client.getHealth(request, (err, resp) => {
+      if(err) console.log(err)
+      else {
+        setHealth(resp);
+      }
+    })
 
   }, [])
   
   useEffect(() => {
     if(isHearbeatOn) {
       console.log("start streaming")
-      stream = client.getHeartbeats(new Empty(), {}) as ClientReadableStream<Heartbeat>
+      stream = client.getHeartbeats(new Empty())
       stream?.on('data', (chunk: Heartbeat) => {
         setBeats(beats => [...beats, chunk]);
       })
       .on('end', () => {
-        console.log("end");
-        const upVal = beats.filter((beat, idx, arr) => beat.getStatus() === Status.UP).reduce( (acc, val, arr) => acc + 1, 0)
-        const downVal = beats.length - upVal
-
-        console.log(`Up : ${upVal} , down : ${downVal}`);
+        //toggleHeartbeatRequest()
       })
-      .on('close', () => {
-        console.log("closed")
-      })
-      .on('error', (err) => {
-        console.log(err)
+      .on('status', (status) => {
+        console.log(status);
       })
       
     } else {
@@ -74,13 +67,28 @@ function App() {
       {
         isOnline ?
         <div className="beats-browser">
-          { !isHearbeatOn ? <button onClick={toggleHeartbeatRequest}>START</button> : ""}
+          { 
+            !isHearbeatOn ? 
+            <Button variant="contained" 
+              startIcon={ <LocalHospital />} 
+              onClick={toggleHeartbeatRequest}
+            >START</Button> 
+            : <div className="stats">
+                <span className="material-icons" style={{color: '#008800'}}>favorite</span>
+                <span>{beats.filter((beat, idx, arr) => beat.getStatus() === Status.UP).length}</span>
+                <span className="material-icons" style={{color: '#CC0000'}}>favorite</span>
+                <span>{beats.filter((beat, idx, arr) => beat.getStatus() === Status.DOWN).length}</span>
+              </div>
+          }
           <div className="beats">
             {
               beats.map((beat, index) => (
-                <span id={`row-id-${index}`} 
-                  className={`beat ${beat.getStatus() === Status.UP ? "online" : "offline"}`} 
-                  key={`row-id-${index}`}>{JSON.stringify(beat)}</span>
+                <div key={`beat-id-${index}`} className={`beat ${beat.getStatus() === Status.UP ? "online" : "offline"}` }>
+                  <span className="id">{index + 1}</span>
+                  <span className="detail">
+                      {JSON.stringify(beat)}
+                  </span>
+                </div>
               ))
             }
           </div>

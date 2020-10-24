@@ -19,11 +19,16 @@ dependencies {
 }
 
 application {
-    mainClassName = "orh.hshekhar.grpc.AppKt"
+    mainClassName = "org.hshekhar.grpc.AppKt"
 }
 
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = application.mainClassName
     }
+
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+
 }
