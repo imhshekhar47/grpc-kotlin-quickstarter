@@ -22,7 +22,10 @@ class HealthService(private val date: Date = Date()) : HealthServiceGrpcKt.Healt
     }
 
     override fun getHeartbeats(request: Empty): Flow<Heartbeat> = flow {
-        while(true) {
+        val max = 25
+        var counter = 0
+        while(counter<max) {
+            counter++
             delay(1000)
             val now = Date()
             val beat = Heartbeat.newBuilder()

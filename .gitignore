@@ -1,0 +1,7 @@
+*.tmp
+*.swp
+
+# react-ui
+react-ui/package-lock.json
+react-ui/node_modules/
+react-ui/src/proto/
