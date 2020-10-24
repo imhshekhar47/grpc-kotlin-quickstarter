@@ -1,6 +1,8 @@
 # gRPC Kotlin Quick Starter
 As simple grpc implementation using kotlin.
 
+![React UI screen](./docs/grpc-react-ui.gif)
+
 ##### proto
 Defines the service as proto files.
 
