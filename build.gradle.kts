@@ -1,5 +1,3 @@
-
-
 val protobufVersion : String by extra("3.12.0")
 val grpcVersion: String by extra("1.32.1")
 val grpcKotlinVersion: String by extra("0.1.5")
@@ -7,6 +5,7 @@ val coroutineVersion: String by extra("1.3.9")
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.0"
+    id("org.sonarqube") version "3.1.1"
     id("com.google.protobuf") version "0.8.13" apply(false)
 }
 
@@ -26,6 +25,13 @@ subprojects {
         mavenCentral()
         google()
         jcenter()
+    }
+
+    sonarqube {
+        properties {
+            property("sonar.sourceEncoding", "UTF-8")
+            //property("sonar.sources", "src/main")
+        }
     }
 
     dependencies {
